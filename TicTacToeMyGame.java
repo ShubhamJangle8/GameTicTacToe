@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class TicTacToeMyGame {	
 	static char[] board;
 	static char playerSymbol = 0, compSymbol = 0;
+	static int count = 0;
 	//UC1
 	public TicTacToeMyGame() {
 		board = new char[10];
@@ -41,12 +42,10 @@ public class TicTacToeMyGame {
 		}
 	}
 	//UC4and5
-	public static boolean moveToPlayer() {
-		Scanner input = new Scanner(System.in);
-		
+	public static boolean moveToPlayer(Scanner scanner) {
 		while(true) {
 			System.out.println("Player enter the position you want to move to : ");
-			int position = input.nextInt();
+			int position = scanner.nextInt();
 			if(position < 1 && position > 9) {
 				System.out.println("Enter valid position");
 				continue;
@@ -55,6 +54,7 @@ public class TicTacToeMyGame {
 				if(board[position] == ' ') {
 					board[position] = playerSymbol;
 					showBoard();
+					count++;
 					return true;
 				}
 				else {
@@ -67,8 +67,8 @@ public class TicTacToeMyGame {
 	}
 	
 	public static boolean moveToComp() {
+		System.out.println("Computer moves");
 		while(true) {
-			System.out.println("Computer moves");
 			int position = (int)Math.floor(Math.random() * 10) % 9 + 1;
 			if(position < 1 && position > 9) {
 				continue;
@@ -77,10 +77,11 @@ public class TicTacToeMyGame {
 				if(board[position] == ' ') {
 					board[position] = compSymbol;
 					showBoard();
+					count++;
 					return true;
 				}
 				else {
-					return false;
+					continue;
 				}
 			}
 		}
@@ -89,11 +90,29 @@ public class TicTacToeMyGame {
 	public static int getTossDone() {
 		return (int)Math.floor(Math.random() * 10) % 2;
 	}
-	
+	//UC7
+	public static int getWinner(char symbol) {
+		if(count == 9) {
+			return 2;
+		}
+		if ((board[1] == symbol && board[2] == symbol && board[3] == symbol) ||
+			(board[4] == symbol && board[5] == symbol && board[6] == symbol) ||
+			(board[7] == symbol && board[8] == symbol && board[9] == symbol) ||
+			(board[1] == symbol && board[4] == symbol && board[7] == symbol) ||
+			(board[2] == symbol && board[5] == symbol && board[8] == symbol) ||
+			(board[3] == symbol && board[6] == symbol && board[9] == symbol) ||
+			(board[1] == symbol && board[5] == symbol && board[9] == symbol) ||
+			(board[3] == symbol && board[5] == symbol && board[7] == symbol)) {
+			return 1;
+		}
+		else {
+			return 0;
+		}		
+	}
 	public static void main(String[] args) {
 		final int player = 0, computer = 1;
 		Scanner input = new Scanner(System.in);
-		//Welcome msg
+		//Welcome message
 		System.out.println("Welcome to the TicTacToe game");
 		//Creating board
 		new TicTacToeMyGame();
@@ -109,16 +128,30 @@ public class TicTacToeMyGame {
 		else {
 			System.out.println("Computer won the toss");
 		}
+		//move player and computer based on toss
 		while(true) {
-			if(toss == player) {
-				moveToPlayer();
-				moveToComp();
-				break;
+			if(toss % 2 == player) {
+				moveToPlayer(input);
+				toss++;
+				//Winning condition
+				if(getWinner(playerSymbol) == 1) {
+					System.out.println("Congratulations ,you have won this game");
+					break;
+				}
+				else if(getWinner(playerSymbol) == 2) {
+					System.out.println("No one won this game");
+				}
 			}
-			if(getTossDone() == computer) {
+			else{
 				moveToComp();
-				moveToPlayer();
-				break;
+				toss++;
+				if(getWinner(compSymbol) == 1) {
+					System.out.println("Computer wins the game");
+					break;
+				}
+				else if(getWinner(compSymbol) == 2) {
+					System.out.println("No one won this game");
+				}
 			}
 			
 		}
