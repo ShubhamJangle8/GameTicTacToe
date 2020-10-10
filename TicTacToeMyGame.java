@@ -5,19 +5,30 @@ import java.util.Scanner;
 public class TicTacToeMyGame {	
 	char[] board;
 	
-	
+	//UC1
 	public TicTacToeMyGame() {
 		board = new char[10];
-		for(int i = 0; i < board.length; i++) {
+		for(int i = 1; i < board.length; i++) {
 			board[i] = ' ';
 		}
 	}
-	
+	//UC2
 	public char getSymbol() {
 		Scanner input = new Scanner(System.in);
 		System.out.println("Play with X/O ? ");
 		char symbol = input.next().charAt(0);
 		return symbol;
+	}
+	//UC3
+	public void showBoard() {
+		for(int i = 1; i < board.length; i++) {
+			System.out.print(board[i]);
+			if(i % 3 == 0) {
+				System.out.println("\n---------");
+				continue;
+			}
+			System.out.print(" | ");
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -35,5 +46,8 @@ public class TicTacToeMyGame {
 				System.out.println("Enter a valid Character");
 			}
 		}
+		System.out.println("Your symbol is " + playerSymbol);
+		System.out.println("Computer symbol is " + compSymbol);
+		game.showBoard();
 	}	
 }
