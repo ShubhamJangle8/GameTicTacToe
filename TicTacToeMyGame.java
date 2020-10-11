@@ -161,54 +161,60 @@ public class TicTacToeMyGame {
 	}
 
 	public static void main(String[] args) {
-		final int player = 0, computer = 1;
+		String newGame;
 		Scanner input = new Scanner(System.in);
-		//Welcome message
-		System.out.println("Welcome to the TicTacToe game");
-		//Creating board
-		new TicTacToeMyGame();
-		//Showing board
-		showBoard();
-		//getting symbol for player and computer
-		getSymbol();
-		//It's toss time
-		int toss = getTossDone();
-		if(toss == player) {
-			System.out.println("Player 1 won the toss");
-		}
-		else {
-			System.out.println("Computer won the toss");
-		}
-		//move player and computer based on toss
-		while(true) {
-			if(toss % 2 == player) {
-				moveToPlayer(input);
-				toss++;
-				//Winning condition
-				if(getWinner(playerSymbol, board) == 1) {
-					System.out.println("Congratulations ,you have won this game");
-					break;
-				}
-				else if(getWinner(playerSymbol, board) == 2) {
-					System.out.println("No one won this game");
-					break;
-					
-				}
+		do {
+			final int PLAYER = 0, COMPUTER = 1;
+			//Welcome message
+			System.out.println("Welcome to the TicTacToe game");
+			//Creating board
+			new TicTacToeMyGame();
+			//Showing board
+			showBoard();
+			//getting symbol for player and computer
+			getSymbol();
+			//It's toss time
+			int toss = getTossDone();
+			if(toss == PLAYER) {
+				System.out.println("Player 1 won the toss");
 			}
-			else{
-				moveToComp();
-				toss++;
-				if(getWinner(compSymbol, board) == 1) {
-					System.out.println("Computer wins the game");
-					break;
-				}
-				else if(getWinner(compSymbol, board) == 2) {
-					System.out.println("No one won this game");
-					break;
-				}
+			else {
+				System.out.println("Computer won the toss");
 			}
-			
-		}
+			//move player and computer based on toss
+			while(true) {
+				if(toss % 2 == PLAYER) {
+					moveToPlayer(input);
+					toss++;
+					//Winning condition
+					if(getWinner(playerSymbol, board) == 1) {
+						System.out.println("Congratulations ,you have won this game");
+						break;
+					}
+					else if(getWinner(playerSymbol, board) == 2) {
+						System.out.println("No one won this game");
+						break;
+						
+					}
+				}
+				else{
+					moveToComp();
+					toss++;
+					if(getWinner(compSymbol, board) == 1) {
+						System.out.println("Computer wins the game");
+						break;
+					}
+					else if(getWinner(compSymbol, board) == 2) {
+						System.out.println("No one won this game");
+						break;
+					}
+				}
+				
+			}
+			System.out.println("Do you want to play another game ? Yes/Exit");
+			newGame = input.next();
+		}while(newGame.equals("Yes"));
+		System.out.println("Thank you for playing the game");
 		input.close();
 	}	
 }
