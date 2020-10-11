@@ -68,17 +68,19 @@ public class TicTacToeMyGame {
 		System.out.println("Computer moves");
 		while(true) {
 			int position = (int)Math.floor(Math.random() * 10) % 9 + 1;
-			int winPos = winPosition();
+			int winPos = winPosition(compSymbol);
 			if(winPos != 0) {
 				position = winPos;
 			}
-			else {
-				if(board[position] == ' ') {
-					board[position] = compSymbol;
-					showBoard();
-					count++;
-					return;
-				}
+			int winPosPlayer = winPosition(playerSymbol);
+			if(winPosPlayer != 0 && winPos == 0) {								// computer will choose that position only if computer is not wining
+				position = winPosPlayer;
+			}
+			if(board[position] == ' ') {
+				board[position] = compSymbol;
+				showBoard();
+				count++;
+				return;
 			}
 		}
 	}
@@ -105,14 +107,14 @@ public class TicTacToeMyGame {
 			return 0;
 		}		
 	}
-	//UC8
-	public static int winPosition() {
+	//UC8 and UC9 modified
+	public static int winPosition(char symbol) {
 		char[] copyBoard = board.clone();
 		
 		for(int i = 1; i<copyBoard.length; i++) {
 			if(copyBoard[i] == ' ') {
-				copyBoard[i] = compSymbol;
-				if(getWinner(compSymbol, copyBoard) == 1) {
+				copyBoard[i] = symbol;
+				if(getWinner(symbol, copyBoard) == 1) {
 					return i;
 				}
 				else
@@ -153,7 +155,7 @@ public class TicTacToeMyGame {
 				}
 				else if(getWinner(playerSymbol, board) == 2) {
 					System.out.println("No one won this game");
-					break;
+					
 				}
 			}
 			else{
@@ -165,7 +167,6 @@ public class TicTacToeMyGame {
 				}
 				else if(getWinner(compSymbol, board) == 2) {
 					System.out.println("No one won this game");
-					break;
 				}
 			}
 			
