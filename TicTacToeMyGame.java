@@ -63,25 +63,51 @@ public class TicTacToeMyGame {
 			}
 		}
 	}
-	
+	//modified for UC10
 	public static void moveToComp() {
 		System.out.println("Computer moves");
-		while(true) {
-			int position = (int)Math.floor(Math.random() * 10) % 9 + 1;
-			int winPos = winPosition(compSymbol);
-			if(winPos != 0) {
-				position = winPos;
-			}
+		while (true) {
+			int position = 0;
+			int[] corners = { 1, 3, 7, 9 };
+
+			int winPosComp = winPosition(compSymbol);
 			int winPosPlayer = winPosition(playerSymbol);
-			if(winPosPlayer != 0 && winPos == 0) {								// computer will choose that position only if computer is not wining
+
+			if (winPosComp != 0) {
+				position = winPosComp;
+			} 
+			else if (winPosPlayer != 0) { // computer will choose that position only if computer is not wining
 				position = winPosPlayer;
+			} 
+			else {
+				// counting number of empty corners
+				int countEmptyCorners = 0;
+				for (int i = 0; i < corners.length; i++) {
+					if (board[corners[i]] == ' ') {
+						countEmptyCorners++;
+					}
+				}
+				System.out.println("Empty corners : " + countEmptyCorners);
+				// if no one is winning and all corners are filled then selecting random position
+				if (countEmptyCorners == 0) {
+					position = (int) Math.floor(Math.random() * 10) % 9 + 1;
+				}
+				// if corner is empty then selecting random corner
+				else {
+					while (true) {
+						position = corners[(int) Math.floor(Math.random() * 10) % 4];
+						System.out.println("Corner selected : " + position);
+						if (board[position] == ' ')
+							break;
+					}
+				}
 			}
 			if(board[position] == ' ') {
 				board[position] = compSymbol;
 				showBoard();
 				count++;
 				return;
-			}
+			}	
 		}
 	}
 	//UC6
@@ -155,6 +181,7 @@ public class TicTacToeMyGame {
 				}
 				else if(getWinner(playerSymbol, board) == 2) {
 					System.out.println("No one won this game");
+					break;
 					
 				}
 			}
@@ -167,6 +194,7 @@ public class TicTacToeMyGame {
 				}
 				else if(getWinner(compSymbol, board) == 2) {
 					System.out.println("No one won this game");
+					break;
 				}
 			}
 			
