@@ -42,7 +42,7 @@ public class TicTacToeMyGame {
 		}
 	}
 	//UC4and5
-	public static boolean moveToPlayer(Scanner scanner) {
+	public static void moveToPlayer(Scanner scanner) {
 		while(true) {
 			System.out.println("Player enter the position you want to move to : ");
 			int position = scanner.nextInt();
@@ -55,33 +55,29 @@ public class TicTacToeMyGame {
 					board[position] = playerSymbol;
 					showBoard();
 					count++;
-					return true;
+					break;
 				}
 				else {
 					System.out.println("Enter a valid position! Place already filled !");
-					return false;
 				}
 			}
 		}
-
 	}
 	
-	public static boolean moveToComp() {
+	public static void moveToComp() {
 		System.out.println("Computer moves");
 		while(true) {
 			int position = (int)Math.floor(Math.random() * 10) % 9 + 1;
-			if(position < 1 && position > 9) {
-				continue;
+			int winPos = winPosition();
+			if(winPos != 0) {
+				position = winPos;
 			}
 			else {
 				if(board[position] == ' ') {
 					board[position] = compSymbol;
 					showBoard();
 					count++;
-					return true;
-				}
-				else {
-					continue;
+					return;
 				}
 			}
 		}
@@ -91,7 +87,7 @@ public class TicTacToeMyGame {
 		return (int)Math.floor(Math.random() * 10) % 2;
 	}
 	//UC7
-	public static int getWinner(char symbol) {
+	public static int getWinner(char symbol, char[] board) {
 		if(count == 9) {
 			return 2;
 		}
@@ -109,6 +105,23 @@ public class TicTacToeMyGame {
 			return 0;
 		}		
 	}
+	//UC8
+	public static int winPosition() {
+		char[] copyBoard = board.clone();
+		
+		for(int i = 1; i<copyBoard.length; i++) {
+			if(copyBoard[i] == ' ') {
+				copyBoard[i] = compSymbol;
+				if(getWinner(compSymbol, copyBoard) == 1) {
+					return i;
+				}
+				else
+					copyBoard[i] = ' ';
+			}
+		}
+		return 0;
+	}
+
 	public static void main(String[] args) {
 		final int player = 0, computer = 1;
 		Scanner input = new Scanner(System.in);
@@ -134,23 +147,25 @@ public class TicTacToeMyGame {
 				moveToPlayer(input);
 				toss++;
 				//Winning condition
-				if(getWinner(playerSymbol) == 1) {
+				if(getWinner(playerSymbol, board) == 1) {
 					System.out.println("Congratulations ,you have won this game");
 					break;
 				}
-				else if(getWinner(playerSymbol) == 2) {
+				else if(getWinner(playerSymbol, board) == 2) {
 					System.out.println("No one won this game");
+					break;
 				}
 			}
 			else{
 				moveToComp();
 				toss++;
-				if(getWinner(compSymbol) == 1) {
+				if(getWinner(compSymbol, board) == 1) {
 					System.out.println("Computer wins the game");
 					break;
 				}
-				else if(getWinner(compSymbol) == 2) {
+				else if(getWinner(compSymbol, board) == 2) {
 					System.out.println("No one won this game");
+					break;
 				}
 			}
 			
